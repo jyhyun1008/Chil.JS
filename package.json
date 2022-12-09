@@ -1,0 +1,18 @@
+{
+  "name": "naepyeon",
+  "version": "pre-alpha-0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "tzdata": "^1.0.36"
+  }
+}

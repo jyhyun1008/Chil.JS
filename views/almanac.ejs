@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" >
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <title>七政算內篇 - 曆日</title>
+</head>
+<body>
+    <%-include('./comp/navbar.ejs') %>
+
+    <!--본격적인 HTML은 여기서부터-->
+
+    <div class="container">
+        <div class="words">
+            <h1>推天正冬至</h1>
+            <% for(var i = 0; i < 25; i++){ %>
+                <h2><%=almanac.PyeongGi.JeolGi[i] %></h2>
+                <p>日分: <%=almanac.PyeongGi.GanJi[i] %>日 <%=almanac.PyeongGi.mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.PyeongGi.Ms[i] %></p>
+                <p>西暦: <%=almanac.PyeongGi.Timezone[i] %></p>
+                <p>沒日: <%=almanac.Mol.GanJi[i] %>日</p>
+            <% } %>
+
+            <h2>推天正經朔</h2>
+            <% for(var i = 0; i < 16; i++){ %>
+                <h2><%=almanac.GyeongSak.Month[i] %>月</h2>
+                <h3>朔</h3>
+                <p>日分: <%=almanac.GyeongSak.Phase[0].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[0].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[0].Ms[i] %></p>
+                <p>西暦: <%=almanac.GyeongSak.Phase[0].Timezone[i] %></p>
+
+                <h3>上弦</h3>
+                <p>日分: <%=almanac.GyeongSak.Phase[1].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[1].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[1].Ms[i] %></p>
+                <p>西暦: <%=almanac.GyeongSak.Phase[1].Timezone[i] %></p>
+
+                <h3>望</h3>
+                <p>日分: <%=almanac.GyeongSak.Phase[2].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[2].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[2].Ms[i] %></p>
+                <p>西暦: <%=almanac.GyeongSak.Phase[2].Timezone[i] %></p>
+
+                <h3>下弦</h3>
+                <p>日分: <%=almanac.GyeongSak.Phase[3].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[3].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[3].Ms[i] %></p>
+                <p>西暦: <%=almanac.GyeongSak.Phase[3].Timezone[i] %></p>
+
+                <h3>滅日</h3>
+                <p>滅日: <%=almanac.Myeol.GanJi[i] %>日</p>
+            <% } %>
+            
+        </div>
+    </div>
+    <scirpt src="/js/navbar.js"></scirpt>
+    <script src="/js/index.js"></script>
+
+    <!--footer-->
+    <div class="footer">
+        <div>-</div>
+    </div>
+</body>
+</html>
+
+
