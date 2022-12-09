@@ -11,7 +11,7 @@ function naepyeon(Year) {
         MtoD: 1/10000,
         MtoHD: 1/5000,
         DtoMS: 86400000,
-        MStoD: 1/86400000
+        MStoD: 1/86400000,
     }
 
     const Init = {
@@ -280,6 +280,85 @@ function naepyeon(Year) {
 
     //계산에 필요한 함수들 정의
 
+    function JinGak(mmmm){
+        var list12 = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해']
+        var list24 = ['초', '정']
+        
+        Jin = parseInt(mmmm * 12 / Hr.Jin)
+        rJin = mod(mmmm * 12, Hr.Jin)
+        HlfJin = parseInt(rJin / Hr.HJin)
+        if (rJin > Hr.HJin){
+            Jin += 1
+        }
+        rHJin = mod(rJin, Hr.HJin)
+        Gak = parseInt(rHJin / Hr.Gak)
+        GakBun = mod(rHJin, Hr.Gak)
+        sJin = list12[mod(Jin, 12)] + list24[mod(HlfJin - 1, 2)]
+
+        result = {
+            Jin: sJin,
+            Gak: Gak,
+            Bun: GakBun
+        }
+
+        return result
+    }
+
+    function YCCM(value){
+        return (( 5133200 - (31 * value + 24600) * value ) * value )/10000
+    }
+
+    function Del_YCCM(value){
+        return ( 5108569 - (93 * value + 49293) * value) / 10000
+    }
+
+    function CCYM(value){
+        return (( 4870600 - (27 * value + 22100) * value ) * value )/10000
+    }
+
+    function Del_CCYM(value){
+        return ( 4848473 - (81 * value + 44281) * value) / 10000
+    }
+
+    unit.HANtoD = JeonJong.Day()/Han.Ju
+    unit.DtoHAN = Han.Ju/JeonJong.Day()
+
+    const JJ = {
+        Deg: function(value){
+            var intvalue = parseInt(value)
+            if (intvalue < 83){
+                return ( 11110000 - (325 * intvalue + 28100) * intvalue ) * intvalue /10000 * unit.MtoD
+            } else if (intvalue == 83 || intvalue == 85){
+                return 5.42916616
+            } else if (intvalue == 84){
+                return 5.42934424
+            } else if (intvalue > 85){
+                return ( 11110000 - (325 * (168 - intvalue) + 28100) * (168 - intvalue) ) * (168 - intvalue) /10000 * unit.MtoD
+            }
+        },
+        Del: function(value){
+            var intvalue = parseInt(value)
+            var result
+            if (intvalue < 82){
+                result = ( 1108.1575 - (0.0975 * intvalue + 5.7175) * intvalue) / 10000
+            } else if (intvalue == 82){
+                result = 0.00035616
+            } else if (intvalue == 83){
+                result = 0.00017808
+            } else if (intvalue == 84){
+                result = -0.00017808
+            } else if (intvalue == 85){
+                result = -0.00035616
+            } else if (intvalue > 85){
+                result = -1 * ( 1108.1575 - (0.0975 * (167 - intvalue) + 5.7175) * (167 - intvalue)) / 10000
+            }
+            var meanVel = WolPHaeng.Deg * unit.HANtoD
+            return {SonIk: result, HHaeng: [parseInt((meanVel + result)*10000)/10000, parseInt((meanVel - result)*10000)/10000]}
+        },
+    }
+
+
+
     function mod(n, m) {
         while (n < 0){
             n = n + m;
@@ -290,6 +369,10 @@ function naepyeon(Year) {
     function GanJiOf(JulianDate){
        return IpSeong.GanJi[parseInt(mod(JulianDate - Julian1281.Day(), GiBeob.Day))]
     }
+
+    function GanJiIndexOf(JulianDate){
+        return parseInt(mod(JulianDate - Julian1281.Day(), GiBeob.Day))
+     }
 
     function FromMidnightTo(JulianDate){
         return Math.round(mod((JulianDate - Julian1281.Day())*unit.DtoM, unit.DtoM))
@@ -309,11 +392,7 @@ function naepyeon(Year) {
         var TongJeok = { Min: JungJeok.Min + Init.Gi.Min }
         var cjdj = {
             Min: function(){ return TongJeok.Min + Julian1281.Min() }, // Julian Min
-            Day: function(){ return this.Min() * unit.MtoD }, //Julian Day
-            GanJi: function(){ return GanJiOf(this.Day())},
-            mmmm: function(){ return FromMidnightTo(this.Day())},
-            Ms: function(){ return MillisecOf(this.Day())},
-            Timezone: function(){ return TZConverter(this.Ms()) }
+            Day: function(){ return this.Min() * unit.MtoD } //Julian Day]
         }
 
         var PyeongGi = {
@@ -340,11 +419,7 @@ function naepyeon(Year) {
     var YunYeo = { Min: mod(YunJeok.Min, Sak.Min()) }
     var cjgs = {
         Min: function(){ return (cjdj.Min() - YunYeo.Min)},
-        Day: function(){ return this.Min() * unit.MtoD },
-        GanJi: function(){ return GanJiOf(this.Day())},
-        mmmm: function(){ return FromMidnightTo(this.Day())},
-        Ms: function(){ return MillisecOf(this.Day())},
-        Timezone: function(){ return TZConverter(this.Ms()) }
+        Day: function(){ return this.Min() * unit.MtoD }
     }
 
     var GyeongSak = {
@@ -398,6 +473,7 @@ function naepyeon(Year) {
         }
     }
 
+    // 4. 멸일추산
 
     var Myeol = {
         Day: [],
@@ -423,13 +499,252 @@ function naepyeon(Year) {
         }
     }
 
+    // 5. 사계절의수용사일
+
+    var SuYongSa = {
+        Season: ['春', '夏', '秋', '冬'],
+        OHaeng: ['水', '木', '火', '金', '土'],
+        Init: {Day: [], GanJi: []},
+        Fnal: {Day: [], GanJi: []}
+    }
+
+    for (var i = 0; i < PyeongGi.JeolGi.length; i++){
+        if (mod(i, 6) == 2){
+            SuYongSa.Fnal.Day.push(parseInt(PyeongGi.Day[i] - ToWangChaek.Day))
+            SuYongSa.Fnal.GanJi.push(GanJiOf(PyeongGi.Day[i] - ToWangChaek.Day))
+            SuYongSa.Init.Day.push(parseInt(PyeongGi.Day[i+1]))
+            SuYongSa.Init.GanJi.push(PyeongGi.GanJi[i+1])
+        }
+    }
+
+    // 9. 입영축력
+
+    var cjic = {
+        Day: function(){ return Se.Hlf().Day - YunYeo.Min * unit.MtoD }
+    }
+
+    var IpYeongChuk = [{}, {}, {}, {}]
+
+    for (var j = 0; j < 4; j++){
+        IpYeongChuk[j] = {
+            ElapsedDay: [],
+            YCtag: [],
+            CMtag: [],
+            Day: [],
+            dd: [],
+            mmmm: []
+        }
+        for (var i = 0; i < GyeongSak.Month.length; i++){
+            IpYeongChuk[j].ElapsedDay.push(mod(cjic.Day() + j * Sak.Qrt().Day + i * Sak.Day(), Se.Hlf().Day))
+            IpYeongChuk[j].YCtag.push(parseInt(mod((cjic.Day() + j * Sak.Qrt().Day + i * Sak.Day())/ Se.Hlf().Day, 2)))
+            if (IpYeongChuk[j].YCtag[i] == 1){
+                if (IpYeongChuk[j].Day[i] < YDiv.YCCM.Day){ // 입영초한
+                    IpYeongChuk[j].CMtag.push(0)
+                    IpYeongChuk[j].Day[i] = IpYeongChuk[j].ElapsedDay[i]
+                } else { // 입영말한
+                    IpYeongChuk[j].CMtag.push(1)
+                    IpYeongChuk[j].Day[i] = Se.Hlf().Day - IpYeongChuk[j].ElapsedDay[i]
+                }
+            } if (IpYeongChuk[j].YCtag[i] == 0){
+                if (IpYeongChuk[j].Day[i] < YDiv.CCYM.Day){ // 입축초한
+                    IpYeongChuk[j].CMtag.push(0)
+                    IpYeongChuk[j].Day[i] = IpYeongChuk[j].ElapsedDay[i]
+                } else { // 입축말한
+                    IpYeongChuk[j].CMtag.push(1)
+                    IpYeongChuk[j].Day[i] = Se.Hlf().Day - IpYeongChuk[j].ElapsedDay[i]
+                }
+            }
+            IpYeongChuk[j].dd.push(parseInt(IpYeongChuk[j].Day[i]))
+            IpYeongChuk[j].mmmm.push(mod((IpYeongChuk[j].Day[i] - IpYeongChuk[j].dd[i])*unit.DtoM, unit.DtoM))
+        }
+    }
+
+    // 13. 영축차
+
+    var YeongChukCha = [{}, {}, {}, {}]
+
+    for (var j = 0; j < 4; j++){
+        YeongChukCha[j] = {
+            Deg: []
+        }
+        for (var i = 0; i < GyeongSak.Month.length; i++){
+            if (IpYeongChuk[j].CMtag != IpYeongChuk[j].YCtag){
+                var Del = IpYeongChuk[j].mmmm[i] * Del_YCCM(IpYeongChuk[j].dd[i]) / 10000
+                YeongChukCha[j].Deg.push((YCCM(IpYeongChuk[j].dd[i]) + Del) / 10000)
+            } else {
+                var Del = IpYeongChuk[j].mmmm[i] * Del_CCYM(IpYeongChuk[j].dd[i]) / 10000
+                YeongChukCha[j].Deg.push((CCYM(IpYeongChuk[j].dd[i]) + Del) / 10000)
+            }
+        }
+    }
+
+    // 14. 천정경삭의 입전
+
+    var cjij = {
+        Min: function(){ return mod(JungJeok.Min + Init.Jeon.Min - YunYeo.Min, JeonJong.Min()) },
+        Day: function(){ return this.Min() * unit.MtoD }
+    }
+
+    var IpJeon = [{}, {}, {}, {}]
+
+    for (var j = 0; j < 4; j++){
+        IpJeon[j] = {
+            JJtag: [],
+            Day: [],
+            dd: [],
+            mmmm: [],
+            Han: []
+        }
+        for (var i = 0; i < 16; i++){
+            IpJeon[j].Day.push(mod(cjij.Day() + j * Sak.Qrt().Day + i * Sak.Day(), JeonJong.Day())) //Julian Day
+            if (IpJeon[j].Day[i] < JeonJong.Hlf().Day){
+                IpJeon[j].JJtag.push(0)
+            } else {
+                IpJeon[j].JJtag.push(1)
+                IpJeon[j].Day[i] -= JeonJong.Hlf().Day
+            }
+            IpJeon[j].Han.push(IpJeon[j].Day[i]*12.20)
+            IpJeon[j].dd.push( parseInt(IpJeon[j].Day[i]) )
+            IpJeon[j].mmmm.push(mod((IpJeon[j].Day[i] - IpJeon[j].dd[i])*unit.DtoM, unit.DtoM))
+        }
+    }
+
+    //1.17 지질차 산정
+
+    var JiJilCha = [{}, {}, {}, {}]
+
+    for (var j = 0; j < 4; j++){
+        JiJilCha[j] = {
+            Han: [],
+            Deg: []
+        }
+        for (var i = 0; i < GyeongSak.Month.length; i++){
+            JiJilCha[j].Han.push( parseInt(IpJeon[j].Day[i] * unit.DtoHAN))
+            var rate = parseInt(JiJilCha[j].Han[i]*unit.HANtoD*10000)/10000
+            if (IpJeon[j].Day[i] < rate){
+                rate = parseInt((JiJilCha[j].Han[i]-1)*unit.HANtoD*10000)/10000
+            }
+            //console.log(rate)
+            JiJilCha[j].Deg.push(JJ.Del(JiJilCha[j].Han[i]).SonIk * (IpJeon[j].Day[i] - rate) / 0.0820 + JJ.Deg(JiJilCha[j].Han[i]))
+        }
+    }
+
+    //1.18 가감차 산정
+
+    var GaGamCha = [{}, {}, {}, {}]
+
+    for (var j = 0; j < 4; j++){
+        GaGamCha[j] = {
+            Day: []
+        }
+        for (var i = 0; i < GyeongSak.Month.length; i++){
+            var H = parseInt(IpYeongChuk[j].Day[i] * unit.DtoHAN)
+            var yc = (2*IpYeongChuk[j].YCtag[i]-1)*YeongChukCha[j].Deg[i]
+            var jj = (2*IpJeon[j].JJtag[i]-1)*JiJilCha[j].Deg[i]
+            GaGamCha[j].Day.push((yc+jj)*0.0820 / JJ.Del(JiJilCha[j].Han[i]).HHaeng[IpJeon[j].JJtag[i]])
+        }
+    }
+
+    var JeongSak = {
+        Day: [],
+        GanJi: [],
+        mmmm: [],
+        Ms: [],
+        Timezone: [],
+        LastDay: [],
+        Len: []
+    }
+
+    for (var i = 0; i < GyeongSak.Month.length; i++){
+        JeongSak.Day.push(GyeongSak.Phase[0].Day[i] + GaGamCha[0].Day[i])
+        JeongSak.GanJi.push(GanJiOf(JeongSak.Day[i]))
+        JeongSak.mmmm.push(FromMidnightTo(JeongSak.Day[i]))
+        JeongSak.Ms.push(MillisecOf(JeongSak.Day[i]))
+        JeongSak.Timezone.push(TZConverter(JeongSak.Ms[i]))
+        if (i > 0){
+            JeongSak.LastDay.push(mod(GanJiIndexOf(JeongSak.Day[i]) - GanJiIndexOf(JeongSak.Day[i-1]), 60))
+            if (JeongSak.LastDay[i-1] == 29){
+                JeongSak.Len.push('小')
+            } else if (JeongSak.LastDay[i-1] == 30){
+                JeongSak.Len.push('大')
+            }
+        }
+    }
+
+    var JeongHyunMang = [{}, {}, {}, {}]
+
+    for (var j = 1; j < 4; j++){
+        JeongHyunMang[j] = {
+            Day: [],
+            DayAS: [],
+            dd: [],
+            GanJi: [],
+            mmmm: [],
+            Ms: [],
+            Timezone: [],
+        }
+        for (var i = 0; i < GyeongSak.Month.length; i++){
+            JeongHyunMang[j].Day.push(GyeongSak.Phase[j].Day[i] + GaGamCha[j].Day[i])
+            JeongHyunMang[j].dd.push(GanJiIndexOf(JeongHyunMang[j].Day[i]))
+            JeongHyunMang[j].mmmm.push(FromMidnightTo(JeongHyunMang[j].Day[i]))
+            JeongHyunMang[j].Ms.push(MillisecOf(JeongHyunMang[j].Day[i]))
+            JeongHyunMang[j].Timezone.push(TZConverter(JeongHyunMang[j].Ms[i]))
+            if (i > 0){
+                var value = mod(JeongHyunMang[j].DayAS[i-1] + mod(GanJiIndexOf(JeongHyunMang[j].Day[i])-GanJiIndexOf(JeongHyunMang[j].Day[i-1]), 60), Se.Hlf().Day)
+                console.log(value)
+                JeongHyunMang[j].DayAS.push(value)
+            } else {
+                JeongHyunMang[j].DayAS.push(IpYeongChuk[j].ElapsedDay[i] - PyeongGi.mmmm[0]/10000 + GaGamCha[j].Day[i])
+            }
+            if (IpYeongChuk[j].YCtag[i] == 0){
+                if (JeongHyunMang[j].mmmm[i] < IpSeong.Sunrise_S[Math.round(JeongHyunMang[j].DayAS[i])]){
+                    JeongHyunMang[j].dd[i] -= 1
+                }
+            } else if (IpYeongChuk[j].YCtag[i] == 1){
+                if (JeongHyunMang[j].mmmm[i] < IpSeong.Sunrise_W[Math.round(JeongHyunMang[j].DayAS[i])]){
+                    JeongHyunMang[j].dd[i] -= 1
+                }
+            }
+            JeongHyunMang[j].GanJi.push(IpSeong.GanJi[JeongHyunMang[j].dd[i]])
+        }
+    }
+
+    var Yun = {
+        Month: [],
+        SMonth: [],
+        Day: []
+    }
+
+    for (var i = 0; i < GyeongSak.Month.length; i++){
+        if (i == 0){
+            Yun.Month.push(11)
+        } else {
+            Yun.Month.push(Yun.Month[i-1]%12+1)
+        }
+        Yun.Day.push((YunYeo.Min + i * WolYun.Min) * unit.MtoD - GaGamCha[0].Day[i])
+        if (Yun.Day[i] < Sak.Day()){
+            Yun.SMonth.push(String(Yun.Month[i]))
+        } else if (Yun.Day[i] >= Sak.Day() && Yun.Day[i] <= Sak.Day() + WolYun.Min * unit.MtoD){
+            Yun.SMonth.push('閏'+String(Yun.Month[i-1]))
+        } else if (Yun.Day[i] > Sak.Day() + WolYun.Min * unit.MtoD){
+            Yun.SMonth.push(String(Yun.Month[i-1]))
+        }
+    }
+
+
+
     var result = {
         PyeongGi: PyeongGi,
         GyeongSak: GyeongSak,
         Mol: Mol,
-        Myeol: Myeol
+        Myeol: Myeol,
+        SuYongSa: SuYongSa,
+        JeongSak: JeongSak,
+        JeongHyunMang: JeongHyunMang,
+        Yun: Yun
     }
 
+    console.log(JeongSak);
 
     return result
 }

@@ -24,31 +24,43 @@
                 <p>沒日: <%=almanac.Mol.GanJi[i] %>日</p>
             <% } %>
 
-            <h2>推天正經朔</h2>
+            <h1>推天正經朔</h1>
             <% for(var i = 0; i < 16; i++){ %>
-                <h2><%=almanac.GyeongSak.Month[i] %>月</h2>
+                <h2><%=almanac.Yun.SMonth[i] %>月 <%=almanac.JeongSak.Len[i] %></h2>
                 <h3>朔</h3>
-                <p>日分: <%=almanac.GyeongSak.Phase[0].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[0].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[0].Ms[i] %></p>
-                <p>西暦: <%=almanac.GyeongSak.Phase[0].Timezone[i] %></p>
+                <p>日分: <%=almanac.JeongSak.GanJi[i] %>日 <%=almanac.JeongSak.mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongSak.Ms[i] %></p>
+                <p>西暦: <%=almanac.JeongSak.Timezone[i] %></p>
 
                 <h3>上弦</h3>
-                <p>日分: <%=almanac.GyeongSak.Phase[1].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[1].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[1].Ms[i] %></p>
-                <p>西暦: <%=almanac.GyeongSak.Phase[1].Timezone[i] %></p>
+                <p>日分: <%=almanac.JeongHyunMang[1].GanJi[i] %>日 <%=almanac.JeongHyunMang[1].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[1].Ms[i] %></p>
+                <p>西暦: <%=almanac.JeongHyunMang[1].Timezone[i] %></p>
 
                 <h3>望</h3>
-                <p>日分: <%=almanac.GyeongSak.Phase[2].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[2].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[2].Ms[i] %></p>
-                <p>西暦: <%=almanac.GyeongSak.Phase[2].Timezone[i] %></p>
+                <p>日分: <%=almanac.JeongHyunMang[2].GanJi[i] %>日 <%=almanac.JeongHyunMang[2].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[2].Ms[i] %></p>
+                <p>西暦: <%=almanac.JeongHyunMang[2].Timezone[i] %></p>
 
                 <h3>下弦</h3>
-                <p>日分: <%=almanac.GyeongSak.Phase[3].GanJi[i] %>日 <%=almanac.GyeongSak.Phase[3].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.GyeongSak.Phase[3].Ms[i] %></p>
-                <p>西暦: <%=almanac.GyeongSak.Phase[3].Timezone[i] %></p>
+                <p>日分: <%=almanac.JeongHyunMang[3].GanJi[i] %>日 <%=almanac.JeongHyunMang[3].mmmm[i] %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[3].Ms[i] %></p>
+                <p>西暦: <%=almanac.JeongHyunMang[3].Timezone[i] %></p>
 
                 <h3>滅日</h3>
                 <p>滅日: <%=almanac.Myeol.GanJi[i] %>日</p>
+            <% } %>
+
+            <h1>五行用事</h1>
+            <% for(var i = 0; i < 4; i++){ %>
+
+                <h3><%=almanac.SuYongSa.OHaeng[4] %>始用事日</h3>
+                <p>日: <%=almanac.SuYongSa.Fnal.GanJi[i] %>日</p>
+
+                <h2>立<%=almanac.SuYongSa.Season[i] %>之節</h2>
+                <h3><%=almanac.SuYongSa.OHaeng[i] %>始用事日</h3>
+                <p>日: <%=almanac.SuYongSa.Init.GanJi[i] %>日</p>
+
             <% } %>
             
         </div>
