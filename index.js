@@ -40,6 +40,11 @@ app.get('/almanac/:year', function (req, res) {
     res.render('almanac', { year: req.params.year, almanac: almanac });
 });
 
+app.get('/almanac/raw/:year', function (req, res) {
+    var almanac = naepyeon(req.params.year);
+    res.send({ year: req.params.year, almanac: almanac });
+});
+
 app.get('/calendar', function (req, res) {
     res.render('calendarindex');
 });
@@ -47,13 +52,17 @@ app.get('/calendar', function (req, res) {
 app.get('/calendar/:year', function (req, res) {
     var almanac = naepyeon(req.params.year);
     var calendar = naepyeonCalendar(almanac);
-        console.log("여기까진 옴...");
     res.render('calendar', { year: req.params.year, calendar: calendar });
+});
+
+app.get('/calendar/raw/:year', function (req, res) {
+    var almanac = naepyeon(req.params.year);
+    var calendar = naepyeonCalendar(almanac);
+    res.send({ year: req.params.year, calendar: calendar });
 });
 
 app.post("/almanac", function (req, res) {
     const year = req.body.newYear
-    console.log(req.body);
     res.redirect('/almanac/'+year);
 });
 

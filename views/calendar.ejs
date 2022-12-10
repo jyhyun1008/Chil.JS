@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" >
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <title>七政算內篇 - 曆日</title>
+    <title>Chil.JS :: 七政算內篇 - 曆日</title>
 </head>
 <body>
     <%-include('./comp/navbar.ejs') %>
@@ -15,23 +15,35 @@
 
     <div class="container">
         <div class="words" style="margin-top:20px;">
-            <a href="/calendar"><span class="Date">Back</span></a>
+            <a href="/calendar"><span class="Date">Back</span></a> <a href="/calendar/raw/<%=year %>"><span class="Date">Raw Data</span></a>
         </div>
         <div class="words">
             <h1><%=year %>年 月曆</h1>
             <% for(var i = 0; i < calendar.length; i++){ %>
                 <% if (i == 0 || calendar[i].Month !== calendar[i - 1].Month) { %>
-                    <hr>
                     <h2><%=calendar[i].Month %></h2>
                 <% } %>
                 <div class = "dayTable">
                     <p style="margin: 10px 0;" ><span class="Date"><%=calendar[i].Month %> <%=calendar[i].Date %></span> <%=calendar[i].GanJi %>日 <span class="<%=calendar[i].color %>"><%=calendar[i].OHaeng %></span> JD <%=calendar[i].JulianDay %> 西暦 <%=calendar[i].Timezone %></p>
                 </div>
-                <ul>
-                <% for(var j = 0; j < calendar[i].event.length; j++){ %>
-                    <li><%=calendar[i].event[j].mmmm %>分: <%=calendar[i].event[j].Name %></li>
+                <% if (calendar[i].event.length > 0){ %>
+                    <div class="progressContainer activeContainer">
+                        <div class="progressBar activeBar">
+                        </div>
+                        <% for(var j = 0; j < calendar[i].event.length; j++){ %>
+                            <% if (calendar[i].event[j].mmmm > 0){ %>
+                                <div class="progressTriangle" style="left: calc( <%=calendar[i].event[j].mmmm %> / 10000 * 100% - 10px" ></div>
+                                <div class="progressPoint" style="left: calc( <%=calendar[i].event[j].mmmm %> / 10000 * 100% - 1.5rem" );"> <%=calendar[i].event[j].Name %><br><%=calendar[i].event[j].mmmm %>分</div>
+                            <% } else { %>
+                                <div style="text-align: center; color: var(--accent);"><%=calendar[i].event[j].Name %></div>
+                            <% } %>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <div class="progressContainer">
+                        <div class="progressBar"></div>
+                    </div>
                 <% } %>
-                </ul>
             <% } %>
             
         </div>

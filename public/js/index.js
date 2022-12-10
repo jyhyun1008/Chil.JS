@@ -21,8 +21,7 @@ function almanacEnter() {
 
 function calendarEnter() {
     if (window.event.keyCode == 13) {
-        var year = document.getElementById("yearInput").value
-        console.log(year);
+        var year = document.getElementById("yearInput").nodeValue
         const req = {
             newYear: year
         }

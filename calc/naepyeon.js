@@ -519,7 +519,6 @@ function naepyeon(Year) {
             SuYongSa.Init.GanJi.push(PyeongGi.GanJi[i+1])
         }
     }
-    console.log(SuYongSa.Init.Day, SuYongSa.Fnal.Day)
 
     // 9. 입영축력
 
@@ -628,7 +627,6 @@ function naepyeon(Year) {
             if (IpJeon[j].Day[i] < rate){
                 rate = parseInt((JiJilCha[j].Han[i]-1)*unit.HANtoD*10000)/10000
             }
-            //console.log(rate)
             JiJilCha[j].Deg.push(JJ.Del(JiJilCha[j].Han[i]).SonIk * (IpJeon[j].Day[i] - rate) / 0.0820 + JJ.Deg(JiJilCha[j].Han[i]))
         }
     }
