@@ -12,6 +12,11 @@
     --bg: #fcfcfc;
     --text: #4c4c4c;
     --accenttext: #fff;
+    --mok: #4545b6;
+    --hwa: #d04848;
+    --to: #f5be32;
+    --geum: #dddddd;
+    --su: #444444;
 }
 
 * {
@@ -46,6 +51,14 @@ h3 {
     padding-bottom: 12px;
     font-size: 1.3em;
 }
+
+hr {
+    margin: 10px auto;
+    border-color: var(--accent);
+    border: solid 1px var(--accent);
+    width: 50%;
+}
+
 
 body {
     font-size: 16px;
@@ -132,7 +145,8 @@ a {
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 5rem;
+        top: 4rem;
+        z-index: 9;
         flex-direction: column;
         background-color: #fff;
         width: 100%;
@@ -168,5 +182,80 @@ a {
         transform: translateY(-8px) rotate(-45deg);
     }
 
+}
 
+.dayTable {
+    margin: 20px 0;
+}
+
+.Date {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--accent);
+    border-radius: 15px;
+}
+
+.Mok {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--mok);
+    border-radius: 15px;
+}
+
+.Hwa {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--hwa);
+    border-radius: 15px;
+}
+
+.To {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--to);
+    border-radius: 15px;
+}
+
+.Geum {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--geum);
+    border-radius: 15px;
+}
+
+.Su {
+    margin: 10px 0;
+    padding: 5px;
+    color: var(--accenttext);
+    background-color: var(--su);
+    border-radius: 15px;
+}
+
+#yearInput {
+    font-family: 'Zen Maru Gothic', 'Noto Sans TC', 'NanumSquareRound', serif;
+
+    max-width: 200px;
+    width: 80%;
+    height: 2rem;
+    margin: 10px auto;
+    border-radius: 15px;
+    border: 0;
+}
+
+#yearSubmit {
+    font-family: 'Zen Maru Gothic', 'Noto Sans TC', 'NanumSquareRound', serif;
+
+    max-width: 200px;
+    width: 10%;
+    height: 2rem;
+    margin: 10px auto;
+    color: var(--accenttext);
+    background-color: var(--accent);
+    border-radius: 15px;
+    border: 0;
 }

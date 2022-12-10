@@ -14,58 +14,80 @@
     <!--본격적인 HTML은 여기서부터-->
 
     <div class="container">
+        <div class="words" style="margin-top:20px;">
+            <a href="/almanac"><span class="Date">Back</span></a>
+        </div>
         <div class="words">
-            <h1>推天正冬至</h1>
-            <% for(var i = 0; i < 25; i++){ %>
-                <h2><%=almanac.PyeongGi.JeolGi[i] %></h2>
-                <p>日分: <%=almanac.PyeongGi.GanJi[i] %>日 <%=almanac.PyeongGi.mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.PyeongGi.Ms[i] %></p>
-                <p>西暦: <%=almanac.PyeongGi.Timezone[i] %></p>
-                <p>沒日: <%=almanac.Mol.GanJi[i] %>日</p>
-            <% } %>
-
-            <h1>推天正經朔</h1>
-            <% for(var i = 0; i < 16; i++){ %>
-                <h2><%=almanac.Yun.SMonth[i] %>月 <%=almanac.JeongSak.Len[i] %></h2>
+            <h1><%=year %>年 定朔弦望日</h1>
+            <% for(var i = 0; i < almanac.length; i++){ %>
+                <h2><%=almanac[i].MonthName %> <%=almanac[i].MonthLength %></h2>
                 <h3>朔</h3>
-                <p>日分: <%=almanac.JeongSak.GanJi[i] %>日 <%=almanac.JeongSak.mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongSak.Ms[i] %></p>
-                <p>西暦: <%=almanac.JeongSak.Timezone[i] %></p>
+                <p>JD: <%=almanac[i].Sak.JulianDay %></p>
+                <p>日分: <%=almanac[i].Sak.GanJi %>日 <%=almanac[i].Sak.mmmm %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].Sak.Ms %></p>
+                <p>西暦: <%=almanac[i].Sak.Timezone %></p>
 
                 <h3>上弦</h3>
-                <p>日分: <%=almanac.JeongHyunMang[1].GanJi[i] %>日 <%=almanac.JeongHyunMang[1].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[1].Ms[i] %></p>
-                <p>西暦: <%=almanac.JeongHyunMang[1].Timezone[i] %></p>
+                <p>JD: <%=almanac[i].SangHyeon.JulianDay %></p>
+                <p>日分: <%=almanac[i].SangHyeon.GanJi %>日 <%=almanac[i].SangHyeon.mmmm %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].SangHyeon.Ms %></p>
+                <p>西暦: <%=almanac[i].SangHyeon.Timezone %></p>
 
                 <h3>望</h3>
-                <p>日分: <%=almanac.JeongHyunMang[2].GanJi[i] %>日 <%=almanac.JeongHyunMang[2].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[2].Ms[i] %></p>
-                <p>西暦: <%=almanac.JeongHyunMang[2].Timezone[i] %></p>
+                <p>JD: <%=almanac[i].Mang.JulianDay %></p>
+                <p>日分: <%=almanac[i].Mang.GanJi %>日 <%=almanac[i].Mang.mmmm %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].Mang.Ms %></p>
+                <p>西暦: <%=almanac[i].Mang.Timezone %></p>
 
                 <h3>下弦</h3>
-                <p>日分: <%=almanac.JeongHyunMang[3].GanJi[i] %>日 <%=almanac.JeongHyunMang[3].mmmm[i] %>分</p>
-                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac.JeongHyunMang[3].Ms[i] %></p>
-                <p>西暦: <%=almanac.JeongHyunMang[3].Timezone[i] %></p>
+                <p>JD: <%=almanac[i].HaHyeon.JulianDay %></p>
+                <p>日分: <%=almanac[i].HaHyeon.GanJi %>日 <%=almanac[i].HaHyeon.mmmm %>分</p>
+                <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].HaHyeon.Ms %></p>
+                <p>西暦: <%=almanac[i].HaHyeon.Timezone %></p>
 
-                <h3>滅日</h3>
-                <p>滅日: <%=almanac.Myeol.GanJi[i] %>日</p>
-            <% } %>
+                <% if (almanac[i].Myeol.JulianDay !== undefined){ %>
+                    <h3>滅日</h3>
+                    <p>JD: <%=almanac[i].Myeol.JulianDay %></p>
+                    <p>日分: <%=almanac[i].Myeol.GanJi %>日</p>
+                    <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].Myeol.Ms %></p>
+                    <p>西暦: <%=almanac[i].Myeol.Timezone %></p>
+                <% } %>
 
-            <h1>五行用事</h1>
-            <% for(var i = 0; i < 4; i++){ %>
+                <% if (!almanac[i].MonthName.includes("閏")){ %>
+                    <h3><%=almanac[i].JeolGi.Name %> <%=almanac[i].MonthName %> 節氣</h3>
+                    <p>JD: <%=almanac[i].JeolGi.JulianDay %></p>
+                    <p>日分: <%=almanac[i].JeolGi.GanJi %>日 <%=almanac[i].JeolGi.mmmm %>分</p>
+                    <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].JeolGi.Ms %></p>
+                    <p>西暦: <%=almanac[i].JeolGi.Timezone %></p>
 
-                <h3><%=almanac.SuYongSa.OHaeng[4] %>始用事日</h3>
-                <p>日: <%=almanac.SuYongSa.Fnal.GanJi[i] %>日</p>
+                    <% if (almanac[i].JeolGi.Mol.JulianDay){ %>
+                        <h3>節氣 沒日</h3>
+                        <p>JD: <%=almanac[i].JeolGi.Mol.JulianDay %></p>
+                        <p>日分: <%=almanac[i].JeolGi.Mol.GanJi %>日</p>
+                        <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].JeolGi.Mol.Ms %></p>
+                        <p>西暦: <%=almanac[i].JeolGi.Mol.Timezone %></p>
+                    <% } %>
 
-                <h2>立<%=almanac.SuYongSa.Season[i] %>之節</h2>
-                <h3><%=almanac.SuYongSa.OHaeng[i] %>始用事日</h3>
-                <p>日: <%=almanac.SuYongSa.Init.GanJi[i] %>日</p>
+                    <h3><%=almanac[i].JungGi.Name %> <%=almanac[i].MonthName %> 中氣</h3>
+                    <p>JD: <%=almanac[i].JungGi.JulianDay %></p>
+                    <p>日分: <%=almanac[i].JungGi.GanJi %>日 <%=almanac[i].JungGi.mmmm %>分</p>
+                    <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].JungGi.Ms %></p>
+                    <p>西暦: <%=almanac[i].JungGi.Timezone %></p>
+
+                    <% if (almanac[i].JungGi.Mol.JulianDay){ %>
+                        <h3>中氣 沒日</h3>
+                        <p>JD: <%=almanac[i].JungGi.Mol.JulianDay %></p>
+                        <p>日分: <%=almanac[i].JungGi.Mol.GanJi %>日</p>
+                        <p>Milliseconds From UTC 1970-01-01 00:00:00: <%=almanac[i].JungGi.Mol.Ms %></p>
+                        <p>西暦: <%=almanac[i].JungGi.Mol.Timezone %></p>
+                    <% } %>
+                <% } %>
 
             <% } %>
             
         </div>
     </div>
-    <scirpt src="/js/navbar.js"></scirpt>
+    <script src="/js/navbar.js"></script>
     <script src="/js/index.js"></script>
 
     <!--footer-->

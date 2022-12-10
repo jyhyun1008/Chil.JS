@@ -9,8 +9,10 @@ const http = require('http');
 const app = express();
 const path = require('path');
 const server = http.createServer(app);
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: false }));
 
-const { naepyeon } = require("./calc/naepyeon.js");
+const { naepyeon, naepyeonCalendar } = require("./calc/naepyeon.js");
 
 const fs = require('fs');
 const pjson = require('./package.json');
@@ -29,9 +31,35 @@ app.get('/about', function (req, res) {
     res.render('about');
 });
 
+app.get('/almanac', function (req, res) {
+    res.render('almanacindex');
+});
+
 app.get('/almanac/:year', function (req, res) {
     var almanac = naepyeon(req.params.year);
     res.render('almanac', { year: req.params.year, almanac: almanac });
+});
+
+app.get('/calendar', function (req, res) {
+    res.render('calendarindex');
+});
+
+app.get('/calendar/:year', function (req, res) {
+    var almanac = naepyeon(req.params.year);
+    var calendar = naepyeonCalendar(almanac);
+        console.log("여기까진 옴...");
+    res.render('calendar', { year: req.params.year, calendar: calendar });
+});
+
+app.post("/almanac", function (req, res) {
+    const year = req.body.newYear
+    console.log(req.body);
+    res.redirect('/almanac/'+year);
+});
+
+app.post("/calendar", function (req, res) {
+    const year = req.body.newYear
+    res.redirect('/calendar/'+year);
 });
 
 server.listen(1281, function(){
