@@ -15,13 +15,15 @@
 
     <div class="container">
         <div class="words">
-            <h1>曆日</h1>
+            <h1>暦日</h1>
             <form class="Input">
                 <input type="text" placeholder="年度" id="yearInput" onkeyup="almanacEnter();">
                 <input type="reset" value="入力" id="yearSubmit" onclick="almanacClick();" >
             </form>
         </div>
         <div class="words">
+            <p>The "Almanac" function currently performs calculations for only "Yeokil" chapter, so the page title is named "暦日(Yeokil)". This function returns major annual events such as moon phases and the 24 seasons month by month, represented in JSON format. The results will be similar to the East Asian "Yeokseo", which means almanac in Korean.</p>
+            <p>Currently, this site only provides information for the years CE 1281-1654. Other input values may result in errors.</p>
         </div>
     </div>
     <script src="/js/navbar.js"></script>
@@ -37,7 +39,7 @@
 
     <!--footer-->
     <div class="footer">
-        <div>-</div>
+        <%-include('./comp/footer.ejs') %>
     </div>
 </body>
 </html>

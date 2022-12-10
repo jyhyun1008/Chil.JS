@@ -21,6 +21,7 @@
 
 * {
     font-size: 14pt;
+    line-height: 1.5rem;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -29,6 +30,7 @@
 
 html {
     font-family: 'Zen Maru Gothic', 'Noto Sans TC', 'NanumSquareRound', serif;
+    height: 100%;
 }
 
 h1 {
@@ -66,6 +68,7 @@ body {
     background-color: var(--bg);
     -ms-overflow-style: none;
     line-height: 1.5em;
+    height: 100%;
 }
 
 li {
@@ -74,6 +77,10 @@ li {
 
 a {
     text-decoration: none;
+}
+
+p {
+    margin-bottom: 10px;
 }
 
 .header{
@@ -125,27 +132,34 @@ a {
     font-size: 1.3rem;
     font-weight: 500;
     color: var(--accenttext);
-    ;
 }
 
 .container {
+    height: auto;
     max-width: 700px;
     margin: 0 auto;
+    min-height: 100%;
+    padding-bottom: 150px;
 }
 
 .words {
+    margin: 10px;
     padding-bottom: 12px;
 }
 
 .footer {
     text-align: center;
+    background-color: #fff;
+    height: 150px;
+    position : relative;
+    transform : translateY(-100%);
 }
 
 @media only screen and (max-width: 768px) {
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 4rem;
+        top: 3rem;
         z-index: 9;
         flex-direction: column;
         background-color: #fff;
@@ -162,7 +176,7 @@ a {
     }
 
     .nav-item {
-        margin: 2.5rem 0;
+        margin: 0.7rem 0;
     }
 
     .hamburger {
@@ -250,6 +264,7 @@ a {
 #yearSubmit {
     font-family: 'Zen Maru Gothic', 'Noto Sans TC', 'NanumSquareRound', serif;
 
+    min-width: 60px;
     max-width: 200px;
     width: 10%;
     height: 2rem;
@@ -299,3 +314,4 @@ a {
     border-bottom: 20px solid var(--accent);
     border-radius: 5px;
   }
+

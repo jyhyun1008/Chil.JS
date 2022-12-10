@@ -15,25 +15,23 @@
 
     <div class="container">
         <div class="words">
-            <h1>月曆</h1>
+            <h1>月暦</h1>
             <form class="Input">
                 <input type="text" placeholder="年度" id="yearInput" onkeyup="calendarEnter();">
                 <input type="reset" value="入力" id="yearSubmit" onclick="calendarClick();" >
             </form>
         </div>
         <div class="words">
-                The "月曆(Calendar)" function returns data that is similar to a modern calendar. The calendar array contains elements for each day of the year, and each element contains information about the day and any events that are scheduled for that day, represented in JSON format.
+                <p>The "月暦(Calendar)" function returns data that is similar to a modern calendar. The calendar array contains elements for each day of the year, and each element contains information about the day and any events that are scheduled for that day, represented in JSON format.</p>
+                <p>Currently, this site only provides information for the years CE 1281-1654. Other input values may result in errors.</p>
         </div>
     </div>
     <script src="/js/navbar.js"></script>
-    <script>
-        
-    </script>
     <script src="/js/index.js"></script>
 
     <!--footer-->
     <div class="footer">
-        <div>-</div>
+        <%-include('./comp/footer.ejs') %>
     </div>
 </body>
 </html>
