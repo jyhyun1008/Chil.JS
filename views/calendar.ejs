@@ -28,6 +28,11 @@
                 </div>
                 <% if (calendar[i].event.length > 0){ %>
                     <div class="progressContainer activeContainer">
+                        <div class="timeStamp" style="left: -0.5rem;">子</div>
+                        <div class="timeStamp" style="left: calc( 25% - 0.5rem );">卯</div>
+                        <div class="timeStamp" style="left: calc( 50% - 0.5rem );">午</div>
+                        <div class="timeStamp" style="left: calc( 75% - 0.5rem );">酉</div>
+                        <div class="timeStamp" style="left: calc( 100% - 0.5rem );">子</div>
                         <div class="progressBar activeBar">
                         </div>
                         <% for(var j = 0; j < calendar[i].event.length; j++){ %>
@@ -35,7 +40,7 @@
                                 <div class="progressTriangle" style="left: calc( <%=calendar[i].event[j].mmmm %> / 10000 * 100% - 10px" ></div>
                                 <div class="progressPoint" style="left: calc( <%=calendar[i].event[j].mmmm %> / 10000 * 100% - 1.5rem" );"> <%=calendar[i].event[j].Name %><br><%=calendar[i].event[j].mmmm %>分</div>
                             <% } else { %>
-                                <div style="text-align: center; color: var(--accent);"><%=calendar[i].event[j].Name %></div>
+                                <div style="text-align: center; color: var(--accent); padding-top: 10px;"><%=calendar[i].event[j].Name %></div>
                             <% } %>
                         <% } %>
                     </div>
