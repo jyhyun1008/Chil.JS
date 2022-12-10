@@ -133,9 +133,9 @@ Cjil.JS는 조선시대 1444년에 만들어진 역법인 '칠정산'의 Node.JS
 | almanac[i].MonthName | 월 |
 | almanac[i].MonthLength | 큰달인지 작은달인지 |
 | almanac[i].Sak | 삭 |
-| almanac[i].SangHyeon | 율리우스 적일 |
-| almanac[i].Mang | 일진 |
-| almanac[i].HaHyeon | 1970년 1월 1일 자정을 기준으로 한 밀리초 |
+| almanac[i].SangHyeon | 상현 |
+| almanac[i].Mang | 망 |
+| almanac[i].HaHyeon | 하현 |
 | almanac[i].JeolGi | 해당 달 절기(그 달에 들어있지 않을 수도 있음) |
 | almanac[i].JeolGi.Name | 절기 이름 |
 | almanac[i].JeolGi.Mol | 절기 몰일 |
