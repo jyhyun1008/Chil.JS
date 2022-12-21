@@ -164,7 +164,7 @@ const HuJun = {
 
 //기타 상수들, 간지표, 절기표 등등
 
-const month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+const month_m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 const month_l = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 const weekDay = ['月', '火', '水', '木', '金', '土', '日']
@@ -396,14 +396,15 @@ function MillisecOf(JulianDate){
     return Math.round(( JulianDate - Init.Julian.Day ) * unit.DtoMS)
 }
 
-function TZConverter(ms){
-    return new Date(ms).toLocaleString("ja-JP", timeStampOptions)
+function TZConverter(JulianDate){
+    result = CalendarDate(JulianDate)
+    return result.year+'年 '+result.month+'月 '+result.day+'日 ('+result.weekDay+')'
 }
 
 function CalendarDate(JD){
 
-    week = weekDay[JD % 7]
-    su = mansions[(JD + 11)%28]
+    week = weekDay[parseInt(JD) % 7]
+    su = mansions[(parseInt(JD) + 11)%28]
     nm = IpSeong.NapEum[GanJiIndexOf(JD)]
 
     if (JD > 2299160) {
@@ -417,21 +418,21 @@ function CalendarDate(JD){
         var m = 0
 
         if (mod (y, 4) != 0 || (y == 0 && mod(c, 4) != 0)){
-            while ( d > month[m] ){
-                d -= month[m]
-                m++
+            while ( d > month_m[m]+1 ){
+                d -= month_m[m]
+                m = mod(m + 1, 12) + 1
             }
         } else {
-            while ( d > month_l[m] ){
+            while ( d > month_l[m]+1 ){
                 d -= month_l[m]
-                m++
+                m = mod(m + 1, 12) + 1
             }
         }
 
         calendar = {
             year: c*100+y,
             month: m,
-            day: d,
+            day: parseInt(d),
             weekDay: week,
             mansions: su,
             NapEum: nm
@@ -441,28 +442,28 @@ function CalendarDate(JD){
         //율리우스력
         
         var c = parseInt((JD - 1721027) / 36525)
-        var res1 = mod(JD - 1721027, 36525)
+        var res1 = mod(JD - 1721027, 36525) - 31
         var y = parseInt(res1 / 365)
-        var d = mod(res1, 365)
-        d -= parseInt(y/4)
-        var m = 0
+        y = parseInt((res1 - parseInt((y-1)/4)) / 365)
+        var d = mod(res1 - parseInt((y-1)/4), 365) 
+        var m = 1
 
         if (mod (y, 4) != 0){
-            while ( d > month[m] ){
-                d -= month[m]
-                m++
+            while ( d > month_m[mod(m-1,12)]+1 ){
+                d -= month_m[mod(m-1,12)]
+                m = mod(m, 12) + 1
             }
         } else {
-            while ( d > month_l[m] ){
-                d -= month_l[m]
-                m++
+            while ( d > month_l[mod(m-1,12)]+1 ){
+                d -= month_l[mod(m-1,12)]
+                m = mod(m, 12) + 1
             }
         }
 
         calendar = {
             year: c*100+y,
             month: m,
-            day: d,
+            day: parseInt(d),
             weekDay: week,
             mansions: su,
             NapEum: nm
@@ -499,7 +500,7 @@ function naepyeon(Year) {
             PyeongGi.GanJi.push( GanJiOf(PyeongGi.Day[i]) )
             PyeongGi.mmmm.push( FromMidnightTo(PyeongGi.Day[i]) )
             PyeongGi.Ms.push( MillisecOf(PyeongGi.Day[i]) )
-            PyeongGi.Timezone.push( TZConverter(PyeongGi.Ms[i]) )
+            PyeongGi.Timezone.push( TZConverter(PyeongGi.Day[i]) )
         }
 
     // 2. 천정경삭
@@ -532,7 +533,7 @@ function naepyeon(Year) {
             GyeongSak.Phase[j].GanJi.push( GanJiOf(GyeongSak.Phase[j].Day[i]) )
             GyeongSak.Phase[j].mmmm.push( FromMidnightTo(GyeongSak.Phase[j].Day[i]) )
             GyeongSak.Phase[j].Ms.push( MillisecOf(GyeongSak.Phase[j].Day[i]) )
-            GyeongSak.Phase[j].Timezone.push( TZConverter(GyeongSak.Phase[j].Ms[i]) )
+            GyeongSak.Phase[j].Timezone.push( TZConverter(GyeongSak.Phase[j].Day[i]) )
         }
     }
 
@@ -558,7 +559,7 @@ function naepyeon(Year) {
             Mol.Day.push(parseInt(PyeongGi.Day[i])+Mol.DayCount[i]+Init.JulianMidnight.Day)
             Mol.GanJi.push(GanJiOf(parseInt(Mol.Day[i])))
             Mol.Ms.push(MillisecOf(Mol.Day[i]))
-            Mol.Timezone.push(TZConverter(Mol.Ms[i]))
+            Mol.Timezone.push(TZConverter(Mol.Day[i]))
         }
     }
 
@@ -584,7 +585,7 @@ function naepyeon(Year) {
             Myeol.Day.push(parseInt(GyeongSak.Phase[0].Day[i])+Myeol.DayCount[i]+Init.JulianMidnight.Day)
             Myeol.GanJi.push(GanJiOf(parseInt(Myeol.Day[i])))
             Myeol.Ms.push(MillisecOf(Myeol.Day[i]))
-            Myeol.Timezone.push(TZConverter(Myeol.Ms[i]))
+            Myeol.Timezone.push(TZConverter(Myeol.Day[i]))
         }
     }
 
@@ -748,7 +749,7 @@ function naepyeon(Year) {
         JeongSak.GanJi.push(GanJiOf(JeongSak.Day[i]))
         JeongSak.mmmm.push(FromMidnightTo(JeongSak.Day[i]))
         JeongSak.Ms.push(MillisecOf(JeongSak.Day[i]))
-        JeongSak.Timezone.push(TZConverter(JeongSak.Ms[i]))
+        JeongSak.Timezone.push(TZConverter(JeongSak.Day[i]))
         if (i > 0){
             JeongSak.LastDay.push(mod(GanJiIndexOf(JeongSak.Day[i]) - GanJiIndexOf(JeongSak.Day[i-1]), 60))
             if (JeongSak.LastDay[i-1] == 29){
@@ -776,7 +777,7 @@ function naepyeon(Year) {
             JeongHyeonMang[j].dd.push(GanJiIndexOf(JeongHyeonMang[j].Day[i]))
             JeongHyeonMang[j].mmmm.push(FromMidnightTo(JeongHyeonMang[j].Day[i]))
             JeongHyeonMang[j].Ms.push(MillisecOf(JeongHyeonMang[j].Day[i]))
-            JeongHyeonMang[j].Timezone.push(TZConverter(JeongHyeonMang[j].Ms[i]))
+            JeongHyeonMang[j].Timezone.push(TZConverter(JeongHyeonMang[j].Day[i]))
             if (i > 0){
                 var value = mod(JeongHyeonMang[j].DayAS[i-1] + mod(GanJiIndexOf(JeongHyeonMang[j].Day[i])-GanJiIndexOf(JeongHyeonMang[j].Day[i-1]), 60), Se.Hlf().Day)
                 JeongHyeonMang[j].DayAS.push(value)
@@ -943,7 +944,7 @@ function naepyeonCalendar(almanac){
             calendar[j].JulianDay = parseInt(almanac[0].Sak.JulianDay) + Init.JulianMidnight.Day + j
             calendar[j].GanJi = [IpSeong.GanJi[mod(parseInt(calendar[j].JulianDay) - 3, 60)]]
             calendar[j].Ms = MillisecOf(calendar[j].JulianDay)
-            calendar[j].Timezone = TZConverter(calendar[j].Ms)
+            calendar[j].Timezone = TZConverter(calendar[j].JulianDay)
             calendar[j].event = []
             //삭이 있는지?!
             if (almanac[i].Sak.GanJi == calendar[j].GanJi){
