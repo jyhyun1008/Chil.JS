@@ -164,6 +164,15 @@ const HuJun = {
 
 //기타 상수들, 간지표, 절기표 등등
 
+const month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+const month_l = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+const weekDay = ['月', '火', '水', '木', '金', '土', '日']
+const mansions = ['角', '亢', '氐', '房', '心', '尾', '箕', 
+                '斗', '牛', '女', '虛', '危', '室', '壁', 
+                '奎', '婁', '胃', '昴', '畢', '觜', '參',
+                '井', '鬼', '柳', '星', '張', '翼', '軫']
+
 const IpSeong = {
     GanJi: ['甲子', '乙丑', '丙寅', '丁卯', '戊辰', '己巳',
     '庚午', '辛未', '壬申', '癸酉', '甲戌', '乙亥',
@@ -175,6 +184,13 @@ const IpSeong = {
     '丙午', '丁未', '戊申', '己酉', '庚戌', '辛亥',
     '壬子', '癸丑', '甲寅', '乙卯', '丙辰', '丁巳',
     '戊午', '己未', '庚申', '辛酉', '壬戌', '癸亥'],
+
+    NapEum: ['金', '金', '火', '火', '木', '木', '土', '土', '金', '金', 
+            '火', '火', '水', '水', '土', '土', '金', '金', '木', '木', 
+            '水', '水', '土', '土', '火', '火', '木', '木', '水', '水',
+            '金', '金', '火', '火', '木', '木', '土', '土', '金', '金', 
+            '火', '火', '水', '水', '土', '土', '金', '金', '木', '木', 
+            '水', '水', '土', '土', '火', '火', '木', '木', '水', '水'],
 
     JeolGi: ['冬至', '小寒', '大寒', '立春', '雨水', '驚蟄',
     '春分', '淸明', '穀雨', '立夏', '小滿', '芒種',
@@ -357,8 +373,6 @@ const JJ = {
     },
 }
 
-
-
 function mod(n, m) {
     while (n < 0){
         n = n + m;
@@ -386,8 +400,80 @@ function TZConverter(ms){
     return new Date(ms).toLocaleString("ja-JP", timeStampOptions)
 }
 
+function CalendarDate(JD){
+
+    week = weekDay[JD % 7]
+    su = mansions[(JD + 11)%28]
+    nm = IpSeong.NapEum[GanJiIndexOf(JD)]
+
+    if (JD > 2299160) {
+        //그레고리력
+        var c = parseInt((JD - 1721029) / 36524)
+        var res1 = mod(JD - 1721029, 36524)
+        res1 -= parseInt(c/4)
+        var y = parseInt(res1 / 365)
+        var d = mod(res1, 365)
+        d -= parseInt(y/4)
+        var m = 0
+
+        if (mod (y, 4) != 0 || (y == 0 && mod(c, 4) != 0)){
+            while ( d > month[m] ){
+                d -= month[m]
+                m++
+            }
+        } else {
+            while ( d > month_l[m] ){
+                d -= month_l[m]
+                m++
+            }
+        }
+
+        calendar = {
+            year: c*100+y,
+            month: m,
+            day: d,
+            weekDay: week,
+            mansions: su,
+            NapEum: nm
+        }
+        return calendar
+    } else {
+        //율리우스력
+        
+        var c = parseInt((JD - 1721027) / 36525)
+        var res1 = mod(JD - 1721027, 36525)
+        var y = parseInt(res1 / 365)
+        var d = mod(res1, 365)
+        d -= parseInt(y/4)
+        var m = 0
+
+        if (mod (y, 4) != 0){
+            while ( d > month[m] ){
+                d -= month[m]
+                m++
+            }
+        } else {
+            while ( d > month_l[m] ){
+                d -= month_l[m]
+                m++
+            }
+        }
+
+        calendar = {
+            year: c*100+y,
+            month: m,
+            day: d,
+            weekDay: week,
+            mansions: su,
+            NapEum: nm
+        }
+        return calendar
+    }
+}
 
 function naepyeon(Year) {
+
+        var SeCha = mod( 17+(Year-1281), 60 );
     
     // 1. 천정동지
 
@@ -746,12 +832,17 @@ function naepyeon(Year) {
         almanac[i - FstMonth] = {}
 
         if(i == FstMonth){
+            almanac[i - FstMonth].SeCha = IpSeong.GanJi[SeCha]
             almanac[i - FstMonth].SuYongSa = SuYongSa
+            almanac[i - FstMonth].CalendarDate = CalendarDate(2299160)
+
+            almanac[i - FstMonth].CalendarDate2 = CalendarDate(2299161)
         }
 
         almanac[i - FstMonth].MonthIndex = Yun.Month[i]
         if (Yun.SMonth[i] < 13){
             almanac[i - FstMonth].MonthName = Yun.SMonth[i]+"月"
+            almanac[i - FstMonth].WolGeon = IpSeong.GanJi[mod(25 + mod(Year - 1, 5) * 12 + Yun.SMonth[i], 60)]
         } else {
             almanac[i - FstMonth].MonthName = "閏"+(Yun.SMonth[i]-12)+"月"
         }

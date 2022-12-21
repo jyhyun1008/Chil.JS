@@ -18,9 +18,9 @@
             <a href="/almanac"><span class="Date">Back</span></a> <a href="/almanac/raw/<%=year %>"><span class="Date">Raw Data</span></a>
         </div>
         <div class="words">
-            <h1><%=year %>年 定朔弦望日</h1>
+            <h1><%=year %> <%=almanac[0].SeCha %>年 定朔弦望日</h1>
             <% for(var i = 0; i < almanac.length; i++){ %>
-                <h2><%=almanac[i].MonthName %> <%=almanac[i].MonthLength %></h2>
+                <h2><%=almanac[i].MonthName %> <%=almanac[i].WolGeon %>月 <%=almanac[i].MonthLength %></h2>
                 <h3>朔</h3>
                 <p>JD: <%=almanac[i].Sak.JulianDay %></p>
                 <p>日分: <%=almanac[i].Sak.GanJi %>日 <%=almanac[i].Sak.mmmm %>分</p>
